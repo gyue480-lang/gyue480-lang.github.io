@@ -15,12 +15,62 @@ description: Let's have a test
             padding: 0;
             box-sizing: border-box;
         }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+        }
+        
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+        }
+        
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8) translateY(20px); }
+            60% { transform: scale(1.05) translateY(-5px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        
+        @keyframes slideIn {
+            0% { opacity: 0; transform: translateX(-30px); }
+            100% { opacity: 1; transform: translateX(0); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        @keyframes typeCursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        @keyframes confetti-fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
         body {
             background: #f4ede4;
             font-family: system-ui, -apple-system, 'Segoe UI', 'PingFang SC', Roboto, 'Helvetica Neue', sans-serif;
             padding: 1.5rem 1rem;
             color: #2c241a;
+            overflow-x: hidden;
         }
+        
         .test-card {
             max-width: 900px;
             margin: 0 auto;
@@ -28,23 +78,53 @@ description: Let's have a test
             border-radius: 2rem;
             box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.15);
             overflow: hidden;
+            position: relative;
         }
+        
+        .test-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(166, 107, 56, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
         .header {
             background: #2b2b2b;
             color: #f5e7d9;
             padding: 1.8rem 1.8rem 1.2rem;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
+        
+        .header::after {
+            content: '👁';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.04;
+            top: -20px;
+            right: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
         .header h1 {
             font-size: 1.9rem;
             font-weight: 700;
             letter-spacing: -0.5px;
+            animation: popIn 0.6s ease-out;
         }
+        
         .header p {
             margin-top: 0.5rem;
             opacity: 0.75;
             font-size: 0.9rem;
+            animation: popIn 0.6s ease-out 0.2s both;
         }
+        
         .progress-area {
             background: #f2ebe1;
             padding: 0.7rem 1.5rem;
@@ -57,19 +137,42 @@ description: Let's have a test
             font-weight: 500;
             border-bottom: 1px solid #e2d5c8;
         }
+        
         .progress-bar {
             flex: 1;
-            height: 7px;
+            height: 10px;
             background: #d9cdbc;
             border-radius: 10px;
             overflow: hidden;
+            position: relative;
         }
+        
         .progress-fill {
             width: 0%;
             height: 100%;
-            background: #8b5a2b;
-            transition: width 0.2s ease;
+            background: #a66b38;
+            transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
         }
+        
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        .progress-mascot {
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
         .question-item {
             background: #ffffff;
             margin: 1.2rem 1.5rem;
@@ -77,19 +180,60 @@ description: Let's have a test
             border-radius: 1.5rem;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03), 0 1px 2px rgba(0, 0, 0, 0.05);
             border: 1px solid #f0e4d8;
+            opacity: 0;
+            animation: slideIn 0.5s ease-out forwards;
+            transition: all 0.3s ease;
+            position: relative;
         }
+        
+        .question-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+        
+        .question-item.answered {
+            border-color: #c9b99f;
+            background: #fdfcfa;
+        }
+        
         .q-text {
             font-weight: 600;
             font-size: 1rem;
             line-height: 1.4;
             margin-bottom: 1rem;
             padding-left: 0.2rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
         }
+        
+        .q-num {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 28px;
+            height: 28px;
+            background: #f2ebe1;
+            border-radius: 50%;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #a66b38;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .question-item.answered .q-num {
+            background: #a66b38;
+            color: white;
+            animation: bounce 0.5s ease;
+        }
+        
         .options {
             display: flex;
             flex-wrap: wrap;
             gap: 0.8rem;
         }
+        
         .opt-label {
             flex: 1;
             background: #faf7f2;
@@ -99,24 +243,110 @@ description: Let's have a test
             align-items: center;
             gap: 0.6rem;
             cursor: pointer;
-            border: 1px solid #e7dfd5;
-            transition: 0.1s;
+            border: 2px solid #e7dfd5;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
         }
+        
+        .opt-label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(166, 107, 56, 0.05);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
         .opt-label:hover {
             background: #f3ede5;
             border-color: #c9b99f;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
         }
+        
+        .opt-label:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .opt-label:active {
+            transform: translateY(0) scale(0.98);
+        }
+        
+        .opt-label.selected {
+            background: #fef8f0;
+            border-color: #a66b38;
+            animation: wiggle 0.4s ease;
+        }
+        
+        .opt-label.selected::after {
+            content: '✓';
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a66b38;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
         input[type="radio"] {
             accent-color: #8b5a2b;
             width: 1.1rem;
             height: 1.1rem;
             flex-shrink: 0;
             cursor: pointer;
+            opacity: 0;
+            position: absolute;
         }
+        
+        .radio-custom {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #c9b99f;
+            border-radius: 50%;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+        
+        .opt-label:hover .radio-custom {
+            border-color: #a66b38;
+            transform: scale(1.1);
+        }
+        
+        .opt-label.selected .radio-custom {
+            border-color: #a66b38;
+            background: #a66b38;
+        }
+        
+        .opt-label.selected .radio-custom::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+        
         .opt-text {
             font-size: 0.9rem;
             line-height: 1.35;
+            transition: all 0.2s ease;
         }
+        
+        .opt-label.selected .opt-text {
+            font-weight: 600;
+            color: #a66b38;
+        }
+        
         .actions {
             display: flex;
             gap: 1rem;
@@ -124,6 +354,7 @@ description: Let's have a test
             padding: 0.8rem 1.5rem 2rem;
             flex-wrap: wrap;
         }
+        
         button {
             border: none;
             background: #2b2b2b;
@@ -133,30 +364,77 @@ description: Let's have a test
             border-radius: 2rem;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: 0.15s;
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
             font-family: inherit;
+            position: relative;
+            overflow: hidden;
         }
+        
+        button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        button:active::before {
+            width: 300px;
+            height: 300px;
+        }
+        
         button.btn-primary {
             background: #a66b38;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(166, 107, 56, 0.3);
+            animation: pulse 2s ease-in-out infinite;
         }
+        
         button.btn-primary:hover {
             background: #8b562b;
-            transform: translateY(-2px);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(166, 107, 56, 0.4);
         }
+        
+        button.btn-primary:active {
+            transform: translateY(-1px) scale(0.98);
+        }
+        
         button.btn-secondary {
             background: #bcab95;
         }
+        
         button.btn-secondary:hover {
             background: #a69078;
+            transform: translateY(-2px) scale(1.03);
         }
+        
         .result-box {
             background: #fef8f0;
             margin: 0 1.5rem 1.8rem;
             border-radius: 1.5rem;
             padding: 1.5rem;
             border-left: 6px solid #a66b38;
+            display: none;
+            animation: popIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
         }
+        
+        .result-box::before {
+            content: '💀';
+            position: absolute;
+            font-size: 12rem;
+            opacity: 0.02;
+            top: -30px;
+            right: -20px;
+            animation: float 8s ease-in-out infinite;
+        }
+        
         .art-name {
             text-align: center;
             font-size: 2.4rem;
@@ -168,23 +446,35 @@ description: Let's have a test
             color: transparent;
             text-shadow: 2px 2px 8px rgba(0,0,0,0.05);
             margin: 0.5rem 0 1rem 0;
+            animation: popIn 0.6s ease-out;
         }
+        
         .art-name span {
             font-size: 2rem;
         }
+        
         .quote-left, .quote-right {
             font-size: 3rem;
             color: #c9b99f;
             font-family: serif;
             vertical-align: middle;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
         }
+        
+        .quote-right {
+            animation-delay: 1.5s;
+        }
+        
         .result-title {
             font-size: 1.2rem;
             font-weight: 700;
             margin: 1rem 0 0.5rem;
             text-align: center;
             color: #5a3e28;
+            animation: slideIn 0.5s ease-out 0.3s both;
         }
+        
         .result-desc {
             font-size: 0.95rem;
             line-height: 1.55;
@@ -193,50 +483,105 @@ description: Let's have a test
             border-top: 1px dashed #e2d5c8;
             padding-top: 1rem;
         }
+        
         .analysis-section {
             background: #faf3e8;
             border-radius: 1rem;
             padding: 0.8rem 1rem;
             margin: 0.8rem 0;
             font-size: 0.9rem;
+            animation: slideIn 0.5s ease-out both;
+            border-left: 3px solid #c9b99f;
+            transition: all 0.3s ease;
         }
+        
+        .analysis-section:hover {
+            transform: translateX(5px);
+            background: #f5ede0;
+        }
+        
+        .analysis-section:nth-child(1) { animation-delay: 0.4s; }
+        .analysis-section:nth-child(2) { animation-delay: 0.6s; }
+        .analysis-section:nth-child(3) { animation-delay: 0.8s; }
+        
+        .typewriter {
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 2px solid #a66b38;
+            animation: typeCursor 0.8s step-end infinite;
+        }
+        
         .footer {
             font-size: 0.7rem;
             text-align: center;
             padding: 1rem;
             color: #ad9a82;
             border-top: 1px solid #f0e2d4;
+            position: relative;
         }
+        
+        .footer::before {
+            content: '👀';
+            margin-right: 0.5rem;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        
+        .scroll-hint {
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            color: #ad9a82;
+            opacity: 0;
+            transition: opacity 0.3s;
+            animation: bounce 2s infinite;
+        }
+        
+        .scroll-hint.show {
+            opacity: 1;
+        }
+
         @media (max-width: 550px) {
             .question-item { margin: 1rem; }
             .opt-label { flex: 100%; }
             .art-name { font-size: 1.8rem; }
             .quote-left, .quote-right { font-size: 2rem; }
+            .header h1 { font-size: 1.5rem; }
         }
     </style>
 </head>
 <body>
 <div class="test-card">
     <div class="header">
-        <h1>测测你的地下室人格</h1>
+        <h1>👁 测测你的地下室人格</h1>
         <p>大学生限定 · 你的体面人设 vs 地下室真我</p>
     </div>
     <div class="progress-area">
-        <span>答题进度</span>
+        <span>答题进度 <span class="progress-mascot" id="progressMascot">😴</span></span>
         <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
         <span id="counter">0 / 18</span>
     </div>
     <div id="questionsContainer"></div>
+    <div class="scroll-hint" id="scrollHint">👇 继续往下翻还有更多题哦</div>
     <div class="actions">
-        <button class="btn-primary" id="submitBtn">揭穿双重身份</button>
-        <button class="btn-secondary" id="resetBtn">重新开局</button>
+        <button class="btn-primary" id="submitBtn">🔥 揭穿双重身份</button>
+        <button class="btn-secondary" id="resetBtn">🔄 重新开局</button>
     </div>
-    <div id="resultArea" class="result-box" style="display: none;"></div>
+    <div id="resultArea" class="result-box"></div>
     <div class="footer">每个问题凭直觉选 · 无对错 · 你的暗面正在偷看</div>
 </div>
 
 <script>
-    // ---------- 题目库 ----------
+    // ==================== 18道大学生活场景题 ====================
     const QUESTIONS = [
         { text: "期末周你在图书馆占了个座，去接个水回来发现有人坐在你的位置上，还把你的水杯挪到一边。你会？", left: "礼貌但坚定地说“同学这是我的位置”", right: "算了，反正还有其他空位，不浪费时间" },
         { text: "你的室友在宿舍群里发了一段偷拍的别人出糗的视频，大家笑得很开心。你会？", left: "觉得不太合适，会私聊室友让他删掉", right: "跟着哈哈哈，反正也不是我出糗" },
@@ -258,14 +603,26 @@ description: Let's have a test
         { text: "你曾经为了逃避写论文而花了三小时整理桌面/刷短视频/研究奇怪的知识吗？", left: "经常，逃避可耻但有用", right: "不太会，我一般会先做完再玩" }
     ];
 
-    // 维度映射（左高右低）
+    // 维度映射（与题目顺序严格对应：1-3正义度，4-6敏感度，7-9幸福度，10-12真实度，13-15自由度，16-18思考度）
     const DIM_MAP = [
-        { dim: "justice", high: "J", low: "E" }, { dim: "justice", high: "J", low: "E" }, { dim: "justice", high: "J", low: "E" },
-        { dim: "sensitivity", high: "S", low: "D" }, { dim: "sensitivity", high: "S", low: "D" }, { dim: "sensitivity", high: "S", low: "D" },
-        { dim: "happiness", high: "H", low: "U" }, { dim: "happiness", high: "H", low: "U" }, { dim: "happiness", high: "H", low: "U" },
-        { dim: "reality", high: "R", low: "P" }, { dim: "reality", high: "R", low: "P" }, { dim: "reality", high: "R", low: "P" },
-        { dim: "freedom", high: "F", low: "T" }, { dim: "freedom", high: "F", low: "T" }, { dim: "freedom", high: "F", low: "T" },
-        { dim: "think", high: "L", low: "I" }, { dim: "think", high: "L", low: "I" }, { dim: "think", high: "L", low: "I" }
+        { dim: "justice", high: "J", low: "E" },   // 1
+        { dim: "justice", high: "J", low: "E" },   // 2
+        { dim: "justice", high: "J", low: "E" },   // 3
+        { dim: "sensitivity", high: "S", low: "D" },//4
+        { dim: "sensitivity", high: "S", low: "D" },//5
+        { dim: "sensitivity", high: "S", low: "D" },//6
+        { dim: "happiness", high: "H", low: "U" },  //7
+        { dim: "happiness", high: "H", low: "U" },  //8
+        { dim: "happiness", high: "H", low: "U" },  //9
+        { dim: "reality", high: "R", low: "P" },    //10
+        { dim: "reality", high: "R", low: "P" },    //11
+        { dim: "reality", high: "R", low: "P" },    //12
+        { dim: "freedom", high: "F", low: "T" },    //13
+        { dim: "freedom", high: "F", low: "T" },    //14
+        { dim: "freedom", high: "F", low: "T" },    //15
+        { dim: "think", high: "L", low: "I" },      //16
+        { dim: "think", high: "L", low: "I" },      //17
+        { dim: "think", high: "L", low: "I" }       //18
     ];
 
     const LIGHT_NAMES = {
@@ -277,7 +634,6 @@ description: Let's have a test
         "PFL": "做梦逃兵", "PFI": "快乐傻子", "PTL": "大资本家", "PTI": "空心化石"
     };
 
-    // ---------- 光明形象独立分析（8段）----------
     const LIGHT_ANALYSIS = {
         "持圣光者": "你觉得自己是个讲原则、懂人心、还活得挺开心的人。正义感是你的旗帜，敏感是你的雷达，乐观是你的底色。你相信世界会因为你的存在而稍微亮一点。即使偶尔被人说“圣母”，你也觉得那是夸奖。",
         "悲悯法官": "你认为自己是个道德感强但从不盲目的清醒者。你看到了世界的苦难，也承受着比别人更多的情绪重量。你痛苦，但你觉得这种痛苦让你更深刻、更高级。你是个好人，只是不太快乐。",
@@ -289,7 +645,6 @@ description: Let's have a test
         "现实中人": "你觉得自己是个冷酷的理性人。不内耗，不期待，不抱怨。你只看事实，只做计算。你不快乐，但你觉得快乐是蠢人的专利。你活着，仅此而已。"
     };
 
-    // ---------- 阴暗形象独立分析（8段）----------
     const DARK_ANALYSIS = {
         "暗处判官": "你比你以为的更敢面对自己的不堪。你不怕脏，不怕丑，甚至有点享受挖开伤疤的快感。但你从来不说，只是偷偷在暗处审判自己，也审判别人。你的地下室坐着一个沉默的法官，手起刀落，从不留情。",
         "躁动演员": "你渴望自由，也渴望被看见。但你又懒又怂，只敢在幻想里演一出叛逆大戏。你表面上无所谓，背地里却把每一句台词都排练了八百遍。你的地下室是个空荡荡的舞台，你一个人，对着空气疯狂谢幕。",
@@ -301,7 +656,6 @@ description: Let's have a test
         "空心化石": "你画地为牢，放弃思考，安静地腐烂。你以为自己很安全，其实只是死得比较慢。你不挣扎，不抱怨，甚至不觉得自己有问题。你的地下室是一块化石，曾经有心跳，现在只剩形状。"
     };
 
-    // ---------- 64个组合的专有分析（辛辣版）----------
     const COMBO_ANALYSIS = {
         "持圣光者_暗处判官": "你的道德感是用来照别人的，照自己的时候就调成柔光。你审判全世界，唯独给自己留了后门。虚伪的最高境界是自己都信了。",
         "持圣光者_躁动演员": "你想当圣人又舍不得凡人的快活，于是发明了“内心挣扎”这个人设。你的挣扎只是表演，因为你从没真的选过。",
@@ -376,7 +730,6 @@ description: Let's have a test
         "现实中人_空心化石": "你已经不是人了，是一个社会达尔文主义的标本。你挂在墙上，对所有活着的人说：“看，这才是现实。”"
     };
 
-    // 随机锐评库（备用加一句）
     const ROAST_EXTRA = [
         "你的地下室人格档案已更新。建议别锁门，它迟早要出来。",
         "两面夹击，你还能撑多久？",
@@ -384,6 +737,8 @@ description: Let's have a test
         "做人嘛，最重要的就是双标。",
         "你比你自己以为的有趣多了，可惜你不敢承认。"
     ];
+    
+    const MASCOTS = ['😴', '🤔', '🧐', '😏', '🤨', '😤', '😎', '🤯', '👻', '💀', '😈', '👁', '🔥', '⚡', '🌪', '🌀', '🌊', '✨', '🎭', '🎪', '🎉', '🎊', '💫', '🌟'];
 
     let answers = new Array(18).fill(null);
     let total = 18;
@@ -394,14 +749,19 @@ description: Let's have a test
         let html = '';
         QUESTIONS.forEach((q, idx) => {
             html += `
-                <div class="question-item" data-qidx="${idx}">
-                    <div class="q-text">${idx+1}. ${escapeHtml(q.text)}</div>
+                <div class="question-item" data-qidx="${idx}" style="animation-delay: ${idx * 0.05}s">
+                    <div class="q-text">
+                        <span class="q-num">${idx+1}</span>
+                        <span>${escapeHtml(q.text)}</span>
+                    </div>
                     <div class="options">
-                        <label class="opt-label">
+                        <label class="opt-label" onclick="selectOption(this, ${idx}, 'left')">
+                            <span class="radio-custom"></span>
                             <input type="radio" name="q${idx}" value="left" data-qidx="${idx}">
                             <span class="opt-text">${escapeHtml(q.left)}</span>
                         </label>
-                        <label class="opt-label">
+                        <label class="opt-label" onclick="selectOption(this, ${idx}, 'right')">
+                            <span class="radio-custom"></span>
                             <input type="radio" name="q${idx}" value="right" data-qidx="${idx}">
                             <span class="opt-text">${escapeHtml(q.right)}</span>
                         </label>
@@ -410,6 +770,7 @@ description: Let's have a test
             `;
         });
         container.innerHTML = html;
+        
         for (let i = 0; i < total; i++) {
             const radios = document.querySelectorAll(`input[name="q${i}"]`);
             radios.forEach(radio => {
@@ -417,10 +778,33 @@ description: Let's have a test
                     const qIdx = parseInt(e.target.getAttribute('data-qidx'));
                     answers[qIdx] = e.target.value;
                     updateProgress();
+                    const qItem = document.querySelector(`.question-item[data-qidx="${qIdx}"]`);
+                    qItem.classList.add('answered');
+                    
+                    const nextUnanswered = answers.findIndex((a, i) => a === null && i > qIdx);
+                    if (nextUnanswered !== -1) {
+                        setTimeout(() => {
+                            const nextQ = document.querySelector(`.question-item[data-qidx="${nextUnanswered}"]`);
+                            if (nextQ) {
+                                nextQ.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            }
+                        }, 400);
+                    }
                 });
             });
         }
         updateProgress();
+    }
+    
+    function selectOption(label, idx, value) {
+        const radios = document.querySelectorAll(`input[name="q${idx}"]`);
+        radios.forEach(r => {
+            r.checked = (r.value === value);
+            r.dispatchEvent(new Event('change'));
+        });
+        const labels = label.parentElement.querySelectorAll('.opt-label');
+        labels.forEach(l => l.classList.remove('selected'));
+        label.classList.add('selected');
     }
 
     function updateProgress() {
@@ -428,6 +812,16 @@ description: Let's have a test
         const percent = (answered / total) * 100;
         document.getElementById('progressFill').style.width = `${percent}%`;
         document.getElementById('counter').innerText = `${answered} / ${total}`;
+        
+        const mascotIdx = Math.min(Math.floor((answered / total) * (MASCOTS.length - 1)), MASCOTS.length - 1);
+        document.getElementById('progressMascot').innerText = MASCOTS[mascotIdx];
+        
+        const scrollHint = document.getElementById('scrollHint');
+        if (answered > 0 && answered < total) {
+            scrollHint.classList.add('show');
+        } else {
+            scrollHint.classList.remove('show');
+        }
     }
 
     function computeResult() {
@@ -463,30 +857,60 @@ description: Let's have a test
             toast.style.transform = 'translateX(-50%)';
             toast.style.backgroundColor = bg;
             toast.style.color = 'white';
-            toast.style.padding = '8px 20px';
+            toast.style.padding = '12px 24px';
             toast.style.borderRadius = '40px';
-            toast.style.fontSize = '0.85rem';
+            toast.style.fontSize = '0.9rem';
             toast.style.zIndex = '999';
-            toast.style.fontWeight = '500';
-            toast.style.boxShadow = '0 4px 12px rgba(0,0,0,0.2)';
+            toast.style.fontWeight = '600';
+            toast.style.boxShadow = '0 8px 25px rgba(0,0,0,0.2)';
             toast.style.whiteSpace = 'nowrap';
+            toast.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
             document.body.appendChild(toast);
         }
         toast.style.backgroundColor = bg;
         toast.innerText = msg;
         toast.style.opacity = '1';
+        toast.style.transform = 'translateX(-50%) scale(1)';
         clearTimeout(window.toastTimer);
         window.toastTimer = setTimeout(() => {
             toast.style.opacity = '0';
+            toast.style.transform = 'translateX(-50%) scale(0.8)';
             setTimeout(() => toast.remove(), 300);
-        }, 2000);
+        }, 2500);
+    }
+    
+    function createConfetti() {
+        const colors = ['#a66b38', '#c9b99f', '#8b5a2b', '#bcab95', '#e2d5c8', '#f5e7d9'];
+        for (let i = 0; i < 50; i++) {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + 'vw';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            confetti.style.width = Math.random() * 8 + 4 + 'px';
+            confetti.style.height = Math.random() * 8 + 4 + 'px';
+            confetti.style.animation = `confetti-fall ${Math.random() * 3 + 2}s linear forwards`;
+            confetti.style.animationDelay = Math.random() * 2 + 's';
+            document.body.appendChild(confetti);
+            setTimeout(() => confetti.remove(), 5000);
+        }
     }
 
     function onSubmit() {
         const unanswered = answers.some(a => a === null);
         if (unanswered) {
             const leftCount = answers.filter(a => a === null).length;
-            showToast(`还差 ${leftCount} 道题没选，你的暗面在嘲笑你逃避`, '#b66b3a');
+            const messages = [
+                `还差 ${leftCount} 道题没选，你的暗面在嘲笑你逃避`,
+                `还有 ${leftCount} 个灵魂拷问在等你，别怂`,
+                `逃避 ${leftCount} 道题是解决不了问题的`,
+                `你的地下室人格已经等不及了，还剩 ${leftCount} 题`
+            ];
+            showToast(messages[Math.floor(Math.random() * messages.length)], '#b66b3a');
+            
+            const firstUnanswered = answers.findIndex(a => a === null);
+            const el = document.querySelector(`.question-item[data-qidx="${firstUnanswered}"]`);
+            if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
         const { lightCode, darkCode } = computeResult();
@@ -511,17 +935,19 @@ description: Let's have a test
                 <span style="font-size:1.8rem;">但</span><br>
                 <span class="quote-left">“</span>${darkName}<span class="quote-right">”</span>
             </div>
-            <div class="result-title">你的双重人格档案</div>
+            <div class="result-title">🎭 你的双重人格档案</div>
             <div class="result-desc">
-                <div class="analysis-section"><strong>你自认为</strong><br>${lightAnalysis}</div>
-                <div class="analysis-section"><strong>你的地下室</strong><br>${darkAnalysis}</div>
-                <div class="analysis-section"><strong>组合特写</strong><br>${comboText}</div>
-                <div style="margin-top: 0.8rem; font-style: italic; border-top: 1px solid #e2d5c8; padding-top: 0.6rem;">
-                    锐评：${randomRoast}
+                <div class="analysis-section"><strong>🌟 你自认为</strong><br>${lightAnalysis}</div>
+                <div class="analysis-section"><strong>🕳 你的地下室</strong><br>${darkAnalysis}</div>
+                <div class="analysis-section"><strong>💥 组合特写</strong><br>${comboText}</div>
+                <div style="margin-top: 0.8rem; font-style: italic; border-top: 1px solid #e2d5c8; padding-top: 0.6rem; color: #a66b38; font-weight: 600;">
+                    🔥 锐评：${randomRoast}
                 </div>
-                <div style="margin-top: 0.6rem; font-size:0.75rem; opacity:0.7;">地下室人格档案已更新 · 欢迎常来窥探</div>
+                <div style="margin-top: 0.6rem; font-size:0.75rem; opacity:0.7;">地下室人格档案已更新 · 欢迎常来窥探 👁</div>
             </div>
         `;
+        
+        createConfetti();
         resultDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     }
 
@@ -531,9 +957,12 @@ description: Let's have a test
             radios.forEach(r => r.checked = false);
             answers[i] = null;
         }
+        document.querySelectorAll('.opt-label').forEach(l => l.classList.remove('selected'));
+        document.querySelectorAll('.question-item').forEach(q => q.classList.remove('answered'));
         updateProgress();
         document.getElementById('resultArea').style.display = 'none';
-        showToast('已重置，重新面对你的双重人格吧', '#8b5a2b');
+        showToast('🔄 已重置，重新面对你的双重人格吧', '#8b5a2b');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function escapeHtml(str) {
